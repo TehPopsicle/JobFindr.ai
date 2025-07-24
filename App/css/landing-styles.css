@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+
+/*Hero Section Styles*/
+.hero{
+
+    background-image: url(../assets/Background1.jpg);
+    color: white;
+    padding-top: 110px;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  
+    align-items: center;      
+    padding-bottom: 0px;
+}
+.hero h1{
+    font-size: 80px;
+    font-weight: 300;
+    margin-bottom: 0px;
+    font-family: 'Bitcount Prop Single', 'Poppins', sans-serif;
+}
+.hero h1 span{
+    color: #bf71ff;
+    font-size: 80px;
+    font-weight: 300;
+    margin-bottom: 0px;
+    font-family: 'Bitcount Prop Single', 'Poppins', sans-serif;
+}
+.hero .sub{
+    font-size: 25px;
+    color: #fff;
+    margin-bottom: 30px;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+
+.hero button{
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s ease;
+    transition-duration: 0.5s;
+    margin: 50px 0 70px 0;
+    font-weight: 400;
+}
+.hero button:hover{
+    background-color: #bf7ef5;
+    color: #000000;
+}
+
+/*Why Section Styles*/
+.why{
+    max-height: 50vh;
+    padding-top: 30px;
+    align-items: left;
+    background-color:#292929;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+
+.why h2{
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #fff;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+.why p{
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 10px;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+.why ul{
+    list-style-type: disc;
+    padding-left: 20px;
+    color: #fff;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+.why ul li{
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: #fff;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+
+/*HowItWorks Section Styles*/
+.howitworks{
+    max-height: 80vh;
+    padding-top: 30px;
+    align-items: center;
+    text-align: center;
+    background-color:#0e0e0e;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+.howitworks h2{
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #fff;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+.howitworks p{
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 10px;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+
+
