@@ -2,33 +2,34 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlencode, quote
 import re
-import time
+import math
 import pandas as pd
+import time
 
-def get_num_jobs(search_url):
-    headers = {"User-Agent":"Mozilla/5.0"}
-    res = requests.get(search_url, headers=headers)
-    # Try to find count via regex
+def get_num_jobs(url):
+    headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"}
+    res = requests.get(url, headers=headers)
     m = re.search(r'([\d,]+) jobs', res.text)
     if m:
-        return int(m.group(1).replace(',',''))
-    soup = BeautifulSoup(res.text, 'html.parser')
+        num = m.group(1).replace(',','')
+        return int(num)
+    soup = BeautifulSoup(res.text,'html.parser')
     h1 = soup.find('h1')
     if h1 and h1.text:
         m = re.search(r'([\d,]+) jobs', h1.text)
         if m:
-            return int(m.group(1).replace(',', ''))
-    # Default fallback
-    return 25*4
+            return int(m.group(1).replace(',',''))
+    return 25*4 
 
 def fetch_job_ids(api_url, num_jobs):
     job_ids = []
     headers = {"User-Agent": "Mozilla/5.0"}
     for i in range(0, num_jobs, 25):
-        page_url = f"{api_url}&start={i}"
+        page_url = api_url + f"&start={i}"
         res = requests.get(page_url, headers=headers)
         soup = BeautifulSoup(res.text, 'html.parser')
-        for jobli in soup.find_all("li"):
+        alljobs_on_this_page = soup.find_all("li")
+        for jobli in alljobs_on_this_page:
             card = jobli.find("div", {"class": "base-card"})
             if card and card.has_attr('data-entity-urn'):
                 jobid = card['data-entity-urn'].split(":")[3]
@@ -36,96 +37,62 @@ def fetch_job_ids(api_url, num_jobs):
         time.sleep(1)
     return job_ids
 
-def fetch_job_details(job_ids):
-    results = []
+
+def fetch_job_details(jobids):
+    k = []
     headers = {"User-Agent": "Mozilla/5.0"}
-    api_template = "https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{}"
-
-    for jid in job_ids:
-        data = {}
-        url = api_template.format(jid)
-        resp = requests.get(url, headers=headers)
+    target_url = "https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{}"
+    for jid in jobids:
+        o = {}
+        resp = requests.get(target_url.format(jid), headers=headers)
         soup = BeautifulSoup(resp.text, 'html.parser')
-
-        # Job Title
         try:
-            data["job_title"] = soup.find("h1", class_="top-card-layout__title").get_text(strip=True)
+            o["company"] = soup.find("div",{"class":"top-card-layout__card"}).find("a").find("img").get('alt')
         except:
-            data["job_title"] = None
-
-        # Company Name
+            o["company"] = None
         try:
-            data["company"] = soup.find("a", {"class":"topcard__org-name-link"}).get_text(strip=True)
+            o["job-title"] = soup.find("div",{"class":"top-card-layout__entity-info"}).find("a").text.strip()
         except:
-            try:
-                data["company"] = soup.find("span", {"class":"topcard__flavor"}).get_text(strip=True)
-            except:
-                data["company"] = None
-
-        # Location
+            o["job-title"] = None
         try:
-            data["location"] = soup.find("span", class_="topcard__flavor topcard__flavor--bullet").get_text(strip=True)
+            o["level"] = soup.find("ul",{"class":"description__job-criteria-list"}).find("li").text.replace("Seniority level","").strip()
         except:
-            data["location"] = None
-
-        # Job Link
-        data["job_link"] = f"https://www.linkedin.com/jobs/view/{jid}/"
-
-        # Job Type and Skills
-        data["job_type"] = None
-        data["skills"] = []
-
-        try:
-            criteria = soup.find("ul", {"class":"description__job-criteria-list"}).find_all("li")
-            for li in criteria:
-                header = li.find("h3")
-                if header:
-                    label = header.text.strip()
-                    value = li.find("span").text.strip()
-                    if "Employment type" in label:
-                        data["job_type"] = value
-                    if "Skills" in label or "Seniority level" in label:
-                        spans = li.find_all("span")[1:]  # skip the label span
-                        skills = [span.text.strip() for span in spans if span.text.strip()]
-                        data["skills"].extend(skills)
-        except:
-            pass
-
-        results.append(data)
+            o["level"] = None
+        k.append(o)
         time.sleep(1)
-    return results
+    return k
 
-if __name__ == "__main__":
-    # Customizable parameters
-    keyword = "Python"
-    location = "Delhi"
-    geo_id = 226279558
+# BHIDEGA?
+keyword = "Python"
+location = "Delhi"
 
-    # Optionally customize more params for experimentation
-    params = {
-        "keywords": keyword,
-        "location": location,
-        "geoId": geo_id,
-        "trk": "public_jobs_jobs-search-bar_search-submit",
-        "start": 0
-    }
+# GEOID NIKAAALLLLL NIGESHWAR
+geo_id = 226279558
 
-    baseapi = "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?"
-    api_url = baseapi + urlencode(params)
-    print("[i] Using LinkedIn Jobs API URL:", api_url)
 
-    html_search_url = f"https://www.linkedin.com/jobs/search?keywords={quote(keyword)}&location={quote(location)}&geoId={geo_id}"
+baseapi = "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?"
+params = {
+    "keywords": keyword,
+    "location": location,
+#    "geoId": geo_id,
+    "geoId": geo_id,
+    "trk": "public_jobs_jobs-search-bar_search-submit",
+    "start": 0
+}
+api_url = baseapi + urlencode(params)
+print("API url sample:", api_url)
 
-    num_jobs = get_num_jobs(html_search_url)
-    print("[i] Number of jobs found:", num_jobs)
+html_search_url = f"https://www.linkedin.com/jobs/search?keywords={quote(keyword)}&location={quote(location)}&geoId={geo_id}"
+n_jobs = get_num_jobs(html_search_url)
+print("Number of jobs:", n_jobs)
 
-    job_ids = fetch_job_ids(api_url, num_jobs)
-    print(f"[i] Fetched {len(job_ids)} job IDs")
+#Why are you looking here? Damn don't you have a J*b?
+l = fetch_job_ids(api_url, n_jobs)
 
-    job_data = fetch_job_details(job_ids)
-    print(f"[i] Scraped {len(job_data)} job details")
 
-    # Export to CSV
-    df = pd.DataFrame(job_data)
-    df.to_csv('linkedinjobs_full.csv', index=False, encoding='utf-8')
-    print("[i] Exported data to linkedinjobs_full.csv")
+k = fetch_job_details(l)
+
+#Pakodee finally ban gye
+df = pd.DataFrame(k)
+df.to_csv('linkedinjobs.csv', index=False, encoding='utf-8')
+print("Job data:", k)
