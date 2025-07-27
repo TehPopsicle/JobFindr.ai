@@ -4,10 +4,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>JobFindr.ai - Your AI Job Finder</title>
-        <link rel="stylesheet" href="./css/landing-styles.css">
+        <link rel="stylesheet" href="./css/main-styles.css">
         <link rel="stylesheet" href="./css/common-styles.css">
+        <link rel="stylesheet" href="./css/job-results.css">
         <script src="script.js" defer></script>
-        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="icon" href="./assets/JobFindr-black.jpg" type="image/x-icon">
         <meta name="description" content="Welcome to JobFindr.ai, an AI-powered app for finding the job that is right for you using linkedIN (I honestly don't know if this is legal, but it is a good idea).">
         <meta name="keywords" content="JobFindr.AI, JobFindr, Job, AI, Find, Finder, Employment, Career, Jobs, AI Job Finder, Job Search, Job Opportunities">
         <meta name="author" content="Parthiv Menon">
@@ -19,12 +20,11 @@
     </head>
     <body>
         <div class="navbar">
-            <img src="./assets/" alt="">
+            <img src="./assets/JobFindr-white.jpg" alt="">
             <h1>Job<span>Findr.</span>AI</h1>
             <nav>
                 <ul>
                     <li><a href="./Index.html">Home</a></li>
-                    <li><a href="./Home/#HowItWorks">How It Works</a></li>
                     <li><a href="./Contact.html">Contact</a></li>
                     <li><a href="https://github.com/TehPopsicle/JobFindr.ai">Documentation</a></li>
                 </ul>
@@ -32,16 +32,114 @@
         </div>
         <div class="main">
                 <h1 class="main-title">Job<span>Findr.</span>AI</h1>
-                <h3 class="sub">Search for Jobs</p>
-                <form action="" method="get">
-                    <input type="text" placeholder="Job Title (Optional)" name="jobTitle">
-                    <input type="text" placeholder="Location (Required)" name="location">
-                    <input type="text" placeholder="Skills (Required)" name="skills" required>
-                    <button type="submit"><i class="fas fa-search"></i></button>
+                <h3 class="sub">Search for Jobs</h3>
+                <form id="jobSearchForm" action="/search" method="post">
+                    <input type="text" placeholder="Job Title (Optional)" name="jobTitle" id="jobTitle">
+                    <input type="text" placeholder="Location (Required)" name="location" id="location" required>
+                    <input type="text" placeholder="Skills (Required)" name="skills" id="skills" required>
 
+                    <select name="jobType" id="jobType">
+                        <option value="">Job Type (Any)</option>
+                        <option value="full-time">Full Time</option>
+                        <option value="part-time">Part Time</option>
+                        <option value="contract">Contract</option>
+                        <option value="internship">Internship</option>
+                        <option value="temporary">Temporary</option>
+                    </select>
+
+                    <select name="experienceLevel" id="experienceLevel">
+                        <option value="">Experience Level (Any)</option>
+                        <option value="internship">Internship</option>
+                        <option value="entry-level">Entry Level</option>
+                        <option value="associate">Associate</option>
+                        <option value="mid-senior">Mid-Senior Level</option>
+                        <option value="director">Director</option>
+                        <option value="executive">Executive</option>
+                    </select>
+
+                    <label class="checkbox-container">
+                        <input type="checkbox" name="remoteOnly" id="remoteOnly">
+                        <span class="checkmark"></span>
+                        Remote Only
+                    </label>
+
+                    <button type="submit"><i class="fas fa-search"></i> Search Jobs</button>
                 </form>
-                <p>Disclamer: The AI may not always be accurate. Please verify critical information.</p>
-                <p>All job postings were scraped from <span href="https://www.linkedin.com/">LinkedIn.com</span>.</p>
+
+                <div id="loading" style="display: none; color: #fff;">
+                    <p>Searching for jobs and analyzing with AI...</p>
+                </div>
+
+                <div id="results" style="display: none;">
+                    <h3>AI-Filtered Job Results</h3>
+                    <div id="jobResults"></div>
+                </div>
+                <div class="note">
+                    <p>Disclaimer: The AI may not always be accurate. Please verify critical information.</p>
+                <p>All job postings were scraped from <a href="https://www.linkedin.com/">LinkedIn.com</a>.</p>
+                </div>
+        </div>
+        <footer>
+            <p class="created-by">Created by Parthiv Menon</p>
+            <div class="socials">
+                <a href="https://github.com/TehPopsicle/" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://discordapp.com/users/853635973321195570"><i class="fab fa-discord"></i></a>
+                <a href="./Contact.html">Contact Me</a>
             </div>
+            <p class="note">For best experience, view on computers</p>
+        </footer>
+
+        <script>
+            document.getElementById('jobSearchForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('results').style.display = 'none';
+
+                try {
+                    const response = await fetch('/search', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('results').style.display = 'block';
+
+                    const jobResults = document.getElementById('jobResults');
+                    jobResults.innerHTML = '';
+
+                    if (result.jobs && result.jobs.length > 0) {
+                        result.jobs.forEach(job => {
+                            const jobCard = document.createElement('div');
+                            jobCard.className = 'job-card';
+                            jobCard.innerHTML = `
+                                <h4>${job['job-title'] || 'N/A'}</h4>
+                                <p><strong>Company:</strong> ${job.company || 'N/A'}</p>
+                                <p><strong>Location:</strong> ${job.location || 'N/A'}</p>
+                                <p><strong>Type:</strong> ${job.job_type || 'N/A'}</p>
+                                <p><strong>Level:</strong> ${job.level || 'N/A'}</p>
+                                <p><strong>AI Score:</strong> ${job.ai_score || 'N/A'}/10</p>
+                                <p><strong>AI Analysis:</strong> ${job.ai_analysis || 'N/A'}</p>
+                                ${job.link ? `<a href="${job.link}" target="_blank" class="job-link">View Job</a>` : ''}
+                            `;
+                            jobResults.appendChild(jobCard);
+                        });
+                    } else {
+                        jobResults.innerHTML = '<p>No jobs found matching your criteria.</p>';
+                    }
+                } catch (error) {
+                    document.getElementById('loading').style.display = 'none';
+                    alert('Error searching for jobs: ' + error.message);
+                }
+            });
+        </script>
     </body>
 </html>

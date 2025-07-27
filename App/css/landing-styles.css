@@ -6,7 +6,11 @@
 /*Hero Section Styles*/
 .hero{
 
-    background-image: url(../assets/Background1.jpg);
+    background-image: url(../assets/background.gif);
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: white;
     padding-top: 110px;
     text-align: center;
@@ -118,5 +122,31 @@
     margin-bottom: 10px;
     font-family: 'Comfortaa', 'Poppins', sans-serif;
 }
-
+.howitworks .parent {
+  display: flex;
+  justify-content: space-around;
+  margin: 50px;
+}
+.howitworks .parent .child {
+  width: 20%;
+  background-color: #161B22;
+  border-radius: 25px;
+  color: #fff;
+  padding: 20px 20px 10px 20px;
+  text-align: center;
+}
+.howitworks .parent .child h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.howitworks .parent .child p {
+  font-size: 15px;
+  text-align: center; /* Center-align the text */
+  margin: 0 auto; /* Center the paragraph within the card */
+  width: auto; /* Remove the fixed width */
+  line-height: 1.5; /* Improve readability */
+}
+.howitworks .parent .child .emoji {
+  font-size: 100px;
+}
 

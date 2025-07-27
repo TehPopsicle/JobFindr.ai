@@ -1,0 +1,169 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+
+body{
+    font-family: 'Comfortaa', sans-serif;
+    background-color: #5252527e;
+    background-image: url('../assets/background.gif');;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+.main{
+    padding-top: 100px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+.main h1{
+    color: #fff;
+    font-size: 60px;
+    font-weight: 300;
+    margin-bottom: 0px;
+    font-family: 'Bitcount Prop Single', 'Poppins', sans-serif;
+}
+.main h1 span{
+    color: #bf71ff;
+    font-size: 60px;
+    font-weight: 300;
+    margin-bottom: 0px;
+    font-family: 'Bitcount Prop Single', 'Poppins', sans-serif;
+}
+.main .sub{
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 30px;
+    font-family: 'Comfortaa', 'Poppins', sans-serif;
+}
+
+
+
+/* Job search form styles */
+#jobSearchForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#jobSearchForm input,
+#jobSearchForm select {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+#jobSearchForm input:focus,
+#jobSearchForm select:focus {
+    outline: none;
+    border-color: #bf71ff;;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+#jobSearchForm button {
+    padding: 15px;
+    background-color: #bf71ff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#jobSearchForm button:hover {
+    background-color: #a849f7;
+}
+
+/* Results styles */
+#results {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.job-card {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s;
+}
+
+.job-card:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.job-card h4 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.job-card p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.job-card a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #0077B5;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.job-card a:hover {
+    background-color: #005582;
+}
+
+#loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #jobSearchForm {
+        padding: 15px;
+        max-width: 90%;
+    }
+
+    .job-card {
+        padding: 15px;
+    }
+
+    .job-card h4 {
+        font-size: 18px;
+    }
+}
+
