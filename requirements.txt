@@ -4,3 +4,4 @@ beautifulsoup4
 geopy
 pandas
 urllib3
+dotenv
