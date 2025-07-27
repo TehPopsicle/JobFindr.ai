@@ -109,7 +109,7 @@ def filter_jobs(jobs, criteria):
         job['ai_analysis'] = ai_result.get('analysis', 'Job matches basic criteria')
         
         # Lower threshold to show more jobs
-        if job['ai_score'] >= 6:
+        if job['ai_score'] >= 5:
             filtered.append(job)
     
     print(f"After filtering: {len(filtered)} jobs")
@@ -186,7 +186,7 @@ def search():
         if not filtered_jobs:
             # Return some jobs anyway if filtering removed everything
             for job in jobs[:10]:
-                job['ai_score'] = 6
+                job['ai_score'] = 5
                 job['ai_analysis'] = "Job shown due to no filtered results"
             filtered_jobs = jobs[:10]
         
