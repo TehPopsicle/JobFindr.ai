@@ -31,9 +31,3 @@ Usage of the AI is relatively simple:
 7. An option for scraping jobs on the basis of job type would attract more visitors and users
 8. Currently, the app is only able to scrape 1 job at a time as the same csv file is edited each time
 9. As the app uses an API for it's AI, it is very lightweight but can't handle huge loads of viewers
-
-
-I will continue to work on this project
-
-## CREDITS
-Assets provided by Rudraksh Pandey
